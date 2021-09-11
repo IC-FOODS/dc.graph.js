@@ -36,6 +36,16 @@ var options = {
             }
         }
     },
+    // n: {
+    //     default: 100,
+    //     values: [1, 5, 10, 20, 50, 100, 200],
+    //     selector: '#number',
+    //     needs_redraw: true,
+    //     exert: function(diagram) {
+    //         populate(val);
+    //         diagram.autoZoom('once');
+    //     }
+    // },
     cutoff: null,
     limit: {
         default: 0.5,
@@ -47,6 +57,10 @@ var options = {
                 filters.cutoff.set(val);
             }
         }
+    },
+    transition_duration: {
+        query: 'tdur',
+        default: 1000
     },
     arrows: false,
     tips: true,
@@ -139,22 +153,39 @@ function on_load(filename, error, data) {
         colorDimension = node_flat.crossfilter.dimension(function(n) {
             return n.color;
         }),
-        colorGroup = colorDimension.group();
+        colorGroup = colorDimension.group(),
+        dashDimension = edge_flat.crossfilter.dimension(function(e) {
+            return e.dash;
+        }),
+        dashGroup = dashDimension.group();
 
     var engine = dc_graph.spawn_engine(sync_url.vals.layout, sync_url.vals, sync_url.vals.worker);
     var colors = ['#1b9e77', '#d95f02', '#7570b3'];
     simpleDiagram
         .layoutEngine(engine)
         .timeLimit(5000)
+        .transitionDuration(sync_url.vals.transition_duration)
+        .fitStrategy('horizontal')
+        .restrictPan(true)
+        .margins({top: 5, left: 5, right: 5, bottom: 5})
+        .autoZoom('once-noanim')
+        .zoomDuration(sync_url.vals.transition_duration)
+        .altKeyZoom(true)
         .width('auto')
         .height('auto')
         .autoZoom('once')
         .restrictPan(true)
         .nodeDimension(node_flat.dimension).nodeGroup(node_flat.group)
+        .nodeLabelFill(function(n) {
+            var rgb = d3.rgb(simpleDiagram.nodeFillScale()(simpleDiagram.nodeFill()(n))),
+                // https://www.w3.org/TR/AERT#color-contrast
+                brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+            return brightness > 127 ? 'black' : 'ghostwhite';
+        })
         .nodeFill(function(kv) {
             return kv.value.color;
         })
-        .nodeFillScale(d3.scale.ordinal().domain([0,1,2]).range(colors))
+        .nodeFillScale(d3.scale.ordinal().domain([0,1]).range(colors))
         .edgeDimension(edge_flat.dimension).edgeGroup(edge_flat.group)
         .edgeSource(function(e) { return e.value[sourceattr]; })
         .edgeTarget(function(e) { return e.value[targetattr]; })
@@ -163,6 +194,48 @@ function on_load(filename, error, data) {
         .clusterParent(function(c) { return c.parent; })
     // aesthetics
         .nodeTitle(null); // deactivate basic tooltips
+
+    simpleDiagram.child('select-nodes', dc_graph.select_nodes(
+        {
+            nodeOpacity: 1
+        }).noneIsAll(true)
+                  .autoCropSelection(false));
+    simpleDiagram.child('filter-selection-nodes', dc_graph.filter_selection('select-nodes-group', 'select-nodes'));
+
+    simpleDiagram.child('move-nodes', dc_graph.move_nodes());
+
+    simpleDiagram.child('fix-nodes', dc_graph.fix_nodes({
+        fixedPosTag: 'fixed'
+    }));
+
+    simpleDiagram.child('select-edges', dc_graph.select_edges(
+        {
+            edgeStrokeWidth: 2,
+            edgeOpacity: 1
+        }).noneIsAll(true)
+                  .autoCropSelection(false));
+    simpleDiagram.child('filter-selection-edges',
+                  dc_graph.filter_selection('select-edges-group', 'select-edges')
+                  .dimensionAccessor(function(c) { return c.edgeDimension(); }));
+
+    // pie = dc.pieChart('#pie')
+    //     .width(150).height(150)
+    //     .radius(75)
+    //     .colors(d3.scale.ordinal().domain([0,1,2]).range(colors))
+    //     .dimension(colorDimension)
+    //     .group(colorGroup)
+    //     .label(function() { return ''; })
+    //     .title(function(kv) {
+    //         return colors[kv.key] + ' nodes (' + kv.value + ')';
+    //     });
+
+    // row = dc.rowChart('#row')
+    //     .width(300).height(150)
+    //     .dimension(dashDimension)
+    //     .group(dashGroup)
+    //     .label(function(kv) {
+    //         return dasheses[kv.key].name;
+    //     });
 
     if(sync_url.vals.cutoff) {
         d3.select('#cutoff-stuff').style('display', 'inline-block');

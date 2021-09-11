@@ -3,45 +3,55 @@
   "nodes": [
     {
       "id": 0,
-      "name": "run"
+      "name": "run",
+      "gender":"male"
     },
     {
       "id": 1,
-      "name": "intr"
+      "name": "intr",
+      "gender":"female"
     },
     {
       "id": 2,
-      "name": "runbl"
+      "name": "runbl",
+      "gender":"male"
     },
     {
       "id": 3,
-      "name": "kernel"
+      "name": "kernel",
+      "gender":"male"
     },
     {
       "id": 4,
-      "name": "zombie"
+      "name": "zombie",
+      "gender":"female"
     },
     {
       "id": 5,
       "name": "sleep",
-      "htmltip": "<h1>HTML Tip</h1><table><tr><td>Row 1</td><td>Col 2</td><td>Col 3</td></tr><tr><td>Row 2</td><td>etc.</td><td>and so on</td></tr></table>"
+      "htmltip": "<h1>HTML Tip</h1><table><tr><td>Row 1</td><td>Col 2</td><td>Col 3</td></tr><tr><td>Row 2</td><td>etc.</td><td>and so on</td></tr></table>",
+      "gender":"non-binary"
     },
     {
       "id": 6,
-      "name": "runmem"
+      "name": "runmem",
+      "gender":"female"
     },
     {
       "id": 7,
-      "name": "swap"
+      "name": "swap",
+      "gender":"non-binary"
     },
     {
       "id": 8,
       "name": "runswap",
-      "jsontip": "{\"weird\": \"fields\", \"data\": \"spooky\"}"
+      "jsontip": "{\"weird\": \"fields\", \"data\": \"spooky\"}",
+      "gender":"non-binary"
     },
     {
       "id": 9,
-      "name": "new"
+      "name": "new",
+      "gender":"male"
     }
   ],
   "links": [
