@@ -2,3 +2,6 @@ node_modules
 .grunt
 web/docs/html
 *~
+web/graphs/.DS_Store
+web/.DS_Store
+.DS_Store
