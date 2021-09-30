@@ -38,12 +38,14 @@
   <div id="main">
     <script type="text/javascript" src="js/example-header.js"></script>
     <div id="controls">
-      <select id="layout"></select>
-      <select id="number"></select>
       <div id="left-controls">
-        <label for='#add-node'>Add node&nbsp;</label>
+        <select id="layout"></select>
+        <select id="number"></select>
+        <div id="cutoff-stuff" style="display: none"><label for="cutoff">&nbsp;Edge cutoff:&nbsp;</label><div style="display: inline-block"><input id="cutoff" type="range" min="0" max="1" step="0.05" style="width: 10em"></div>&nbsp;<span id="cutoff-display"></span>&nbsp;&nbsp;&nbsp;</div>
+        <input id="graphviz-attrs" type="checkbox"><label for="graphviz-attrs">&nbsp;Use graphviz <a href="https://graphviz.org/doc/info/attrs.html" target=_blank>attrs</a></label>
+<!--         <label for='#add-node'>Add node&nbsp;</label>
         <select id="add-node"></select>&nbsp;&nbsp;
-        <button id=reset class="btn-xs btn-default">reset</button>&nbsp;&nbsp;
+        <button id=reset class="btn-xs btn-default">reset</button>&nbsp;&nbsp; -->
       </div>
       <div id="middle-controls"></div>
       <div id="right-controls">
@@ -62,6 +64,6 @@
   </div>
   <div id="message" style="display: none;"></div>
 
-<script type="text/javascript" src="js/merge.js"></script>
+  <script type="text/javascript" src="js/merge.js"></script>
 </body>
 </html>
