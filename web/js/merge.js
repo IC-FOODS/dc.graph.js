@@ -148,12 +148,12 @@ function on_load(filename, error, data) {
         return d[sourceattr] + '-' + d[targetattr] + (d.par ? ':' + d.par : '');
     };
     var edge_flat = dc_graph.flat_group.make(edges, edge_key),
-        node_flat = dc_graph.flat_group.make(nodes, function(d) { return d[nodekeyattr]; }),
+        // node_flat = dc_graph.flat_group.make(nodes, function(d) { return d[nodekeyattr]; }),
         cluster_flat = dc_graph.flat_group.make(data.clusters || [], function(d) { return d.key; }),
-        colorDimension = node_flat.crossfilter.dimension(function(n) {
-            return n.color;
-        }),
-        colorGroup = colorDimension.group(),
+        // colorDimension = node_flat.crossfilter.dimension(function(n) {
+        //     return n.color;
+        // }),
+        // colorGroup = colorDimension.group(),
         dashDimension = edge_flat.crossfilter.dimension(function(e) {
             return e.dash;
         }),
@@ -161,6 +161,33 @@ function on_load(filename, error, data) {
 
     var engine = dc_graph.spawn_engine(sync_url.vals.layout, sync_url.vals, sync_url.vals.worker);
     var colors = ['#1b9e77', '#d95f02', '#7570b3'];
+
+    var arrayLength  = nodes.length;
+    for (i = 0; i < arrayLength; i++){
+        var num = nodes[i][nodekeyattr];
+        // console.log(num%2 == 0);
+        if (num%2 == 0){
+            var even_nodes = nodes[i],
+                node_flat = dc_graph.flat_group.make(even_nodes, function(d) {return d[nodekeyattr]; });
+            // console.log(num);
+        }
+        // simpleDiagram
+        //     .nodeFillScale(d3.scale.ordinal().domain([0]).range(colors))
+        //     .nodeDimension(node_flat.dimension).nodeGroup(node_flat.group)
+
+            // else{
+            //     let node_flat = false;
+            //     simpleDiagram.nodeFillScale(d3.scale.ordinal().domain([0,1]).range(colors));
+            // }
+    }
+
+    // var node_flat = (function(){
+    //     var node_flat = false;
+    //     return function(){
+    //         if 
+    //     }
+    // })
+
     simpleDiagram
         .layoutEngine(engine)
         .timeLimit(5000)
@@ -175,7 +202,7 @@ function on_load(filename, error, data) {
         .height('auto')
         .autoZoom('once')
         .restrictPan(true)
-        .nodeDimension(node_flat.dimension).nodeGroup(node_flat.group)
+        // .nodeDimension(node_flat.dimension).nodeGroup(node_flat.group)
         .nodeLabelFill(function(n) {
             var rgb = d3.rgb(simpleDiagram.nodeFillScale()(simpleDiagram.nodeFill()(n))),
                 // https://www.w3.org/TR/AERT#color-contrast
@@ -185,7 +212,7 @@ function on_load(filename, error, data) {
         .nodeFill(function(kv) {
             return kv.value.color;
         })
-        .nodeFillScale(d3.scale.ordinal().domain([0,1]).range(colors))
+        // .nodeFillScale(d3.scale.ordinal().domain([0,1]).range(colors))
         .edgeDimension(edge_flat.dimension).edgeGroup(edge_flat.group)
         .edgeSource(function(e) { return e.value[sourceattr]; })
         .edgeTarget(function(e) { return e.value[targetattr]; })
