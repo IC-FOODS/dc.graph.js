@@ -1,0 +1,246 @@
+{
+    "nodes": [
+        {
+            "key": "meat products",
+            "color": 0
+        },
+        {
+            "key": "chicken",
+            "color": 0
+        },
+        {
+            "key": "neck",
+            "color": 1
+        },
+        {
+            "key": "wing",
+            "color": 1
+        },
+        {
+            "key": "breast",
+            "color": 1
+        },
+        {
+            "key": "drumstick",
+            "color": 1
+        },
+        {
+            "key": "feet",
+            "color": 1
+        },
+        {
+            "key": "thigh",
+            "color": 1
+        },
+        {
+            "key": "claw",
+            "color": 1
+        },
+        {
+            "key": "beef",
+            "color": 0
+        },
+        {
+            "key": "tongue",
+            "color": 1
+        },
+        {
+            "key": "loin",
+            "color": 1
+        },
+        {
+            "key": "rib",
+            "color": 1
+        },
+        {
+            "key": "brisket",
+            "color": 1
+        },
+        {
+            "key": "chuck",
+            "color": 1
+        },
+        {
+            "key": "pork",
+            "color": 0
+        },
+        {
+            "key": "leg/ham",
+            "color": 1
+        },
+        {
+            "key": "belly",
+            "color": 1
+        },
+        {
+            "key": "honey",
+            "color": 2
+        },
+        {
+            "key": "glazed",
+            "color": 2
+        },
+        {
+            "key": "smoked",
+            "color": 2
+        },
+        {
+            "key": "roasted",
+            "color": 2
+        },
+        {
+            "key": "crispy",
+            "color": 2
+        },
+        {
+            "key": "braised",
+            "color": 2
+        }
+    ],
+    "links": [
+        {
+            "key": "chicken",
+            "sourcename": "meat products",
+            "targetname": "chicken",
+            "dash": 0
+        },
+        {
+            "key": "beef",
+            "sourcename": "meat products",
+            "targetname": "beef",
+            "dash": 0
+        },
+        {
+            "key": "pork",
+            "sourcename": "meat products",
+            "targetname": "pork",
+            "dash": 0
+        },
+        {
+            "key": "chicken",
+            "sourcename": "meat products",
+            "targetname": "chicken",
+            "dash": 1
+        },
+        {
+            "key": "neck",
+            "sourcename": "chicken",
+            "targetname": "neck",
+            "dash": 1
+        },
+        {
+            "key": "wing",
+            "sourcename": "chicken",
+            "targetname": "wing",
+            "dash": 1
+        },
+        {
+            "key": "breast",
+            "sourcename": "chicken",
+            "targetname": "breast",
+            "dash": 1
+        },
+        {
+            "key": "claw",
+            "sourcename": "chicken",
+            "targetname": "claw",
+            "dash": 1
+        },
+        {
+            "key": "thigh",
+            "sourcename": "chicken",
+            "targetname": "thigh",
+            "dash": 1
+        },
+        {
+            "key": "drumstick",
+            "sourcename": "chicken",
+            "targetname": "drumstick",
+            "dash": 1
+        },
+        {
+            "key": "feet",
+            "sourcename": "chicken",
+            "targetname": "feet",
+            "dash": 1
+        },
+        {
+            "key": "tongue",
+            "sourcename": "beef",
+            "targetname": "tongue",
+            "dash": 1
+        },
+        {
+            "key": "brisket",
+            "sourcename": "beef",
+            "targetname": "brisket",
+            "dash": 1
+        },
+        {
+            "key": "rib",
+            "sourcename": "beef",
+            "targetname": "rib",
+            "dash": 1
+        },
+        {
+            "key": "chuck",
+            "sourcename": "beef",
+            "targetname": "chuck",
+            "dash": 1
+        },
+        {
+            "key": "loin",
+            "sourcename": "beef",
+            "targetname": "loin",
+            "dash": 1
+        },
+        {
+            "key": "leg/ham",
+            "sourcename": "pork",
+            "targetname": "leg/ham",
+            "dash": 1
+        },
+        {
+            "key": "belly",
+            "sourcename": "pork",
+            "targetname": "belly",
+            "dash": 1
+        },
+        {
+            "key": "honey",
+            "sourcename": "leg/ham",
+            "targetname": "honey",
+            "dash": 2
+        },
+        {
+            "key": "glazed",
+            "sourcename": "leg/ham",
+            "targetname": "glazed",
+            "dash": 2
+        },
+        {
+            "key": "smoked",
+            "sourcename": "leg/ham",
+            "targetname": "smoked",
+            "dash": 2
+        },
+        {
+            "key": "roasted",
+            "sourcename": "belly",
+            "targetname": "roasted",
+            "dash": 2
+        },
+        {
+            "key": "crispy",
+            "sourcename": "belly",
+            "targetname": "crispy",
+            "dash": 2
+        },
+        {
+            "key": "braised",
+            "sourcename": "belly",
+            "targetname": "braised",
+            "dash": 2
+        }
+    ]
+}
