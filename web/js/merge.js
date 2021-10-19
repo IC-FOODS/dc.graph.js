@@ -1,17 +1,17 @@
-var selectionDiagram = dc_graph.diagram("#graph"),
+var selectionDiagram = dc_graph.diagram("#canvas"),
   pie,
   row;
 
 var options = {
   layout: {
-    default: "cola",
+    default: "d3v4force",
     values: dc_graph.engines.available(),
     selector: "#layout",
     needs_relayout: true,
     exert: function (val, diagram) {
       var engine = dc_graph.spawn_engine(val);
       apply_engine_parameters(engine);
-      diagram.layoutEngine(engine).autoZoom("once");
+      diagram.layoutEngine(engine);
     },
   },
   worker: {
@@ -36,6 +36,33 @@ var options = {
   arrows: {
     default: "head",
   },
+  validate: false,
+  minWidth: {
+      default: 200,
+      query: 'minw'
+  },
+  minHeight: {
+      default: 200,
+      query: 'minh'
+  },
+  fit: {
+      default: 'default',
+      selector: '#fit',
+      values: [
+          'default',
+          'vertical',
+          'horizontal',
+          'align_tl',
+          'align_tr',
+          'align_bl',
+          'align_br',
+          'zoom'
+      ],
+      needs_redraw: true,
+      exert: function(val, diagram) {
+          diagram.fitStrategy(val);
+      }
+  }
 };
 var sync_url = sync_url_options(
   options,
@@ -70,7 +97,7 @@ function apply_engine_parameters(engine) {
       engine.gravityStrength(0.1).initialCharge(-1000);
       break;
   }
-  selectionDiagram.initLayoutOnRedraw(engine.layoutAlgorithm() === "cola");
+  // selectionDiagram.initLayoutOnRedraw(engine.layoutAlgorithm() === "cola");
   return engine;
 }
 function build_data(nodes, edges) {
@@ -153,7 +180,7 @@ var on_load = function (filename, error, data) {
   var graph_data = dc_graph.munge_graph(data);
   console.log(graph_data);
   load_graph(graph_data.nodes, graph_data.edges);
-  selectionDiagram.autoZoom("once");
+  selectionDiagram.autoZoom("always");
   dc.redrawAll();
 };
 
@@ -179,6 +206,9 @@ var engine = dc_graph.spawn_engine(
   sync_url.vals.worker
 );
 apply_engine_parameters(engine);
+if(engine.layoutAlgorithm()==='cola')
+    if(typeof sync_url.vals.newcomp !== 'string')
+        sync_url.vals.newcomp = 0;
 var colors = ['#1b9e77', '#d95f02', '#7570b3'];
 var dasheses = [
   { name: "level_1", ray: [15, 10, 5, 10] },
@@ -187,16 +217,17 @@ var dasheses = [
 ];
 selectionDiagram
   .layoutEngine(engine)
-  .timeLimit(5000)
+  .timeLimit(sync_url.vals.interval - 100)
   .transitionDuration(sync_url.vals.transition_duration)
-  .fitStrategy("horizontal")
+  .fitStrategy(sync_url.vals.fit || 'default')
   .restrictPan(true)
-  .margins({ top: 5, left: 5, right: 5, bottom: 5 })
-  .autoZoom("once-noanim")
+  // .margins({ top: 5, left: 5, right: 5, bottom: 5 })
+  .autoZoom('always')
   .zoomDuration(sync_url.vals.transition_duration)
+  .zoomExtent([0.1, 1.5])
   .altKeyZoom(true)
-  .width(600)
-  .height(580)
+  .width('auto')
+  .height('auto')
   .nodeFixed(function (n) {
     return n.value.fixed;
   })
@@ -273,6 +304,30 @@ selectionDiagram.child(
       return c.edgeDimension();
     })
 );
+
+if(sync_url.vals.ports) {
+    selectionDiagram
+        .portStyle('symbols', dc_graph.symbol_port_style())
+        .portStyleName('symbols');
+}
+// var fix_nodes = dc_graph.fix_nodes()
+//     .strategy(dc_graph.fix_nodes.strategy.last_N_per_component(1));
+// selectionDiagram.child('fix-nodes', fix_nodes);
+
+if(sync_url.vals.validate)
+    selectionDiagram.child('troubleshoot', dc_graph.validate());
+
+// selectionDiagram
+//     .autoZoom('always-skipanimonce')
+//     .render();
+
+$('#resize').resizable({
+    resize: function(event, ui) {
+        selectionDiagram.redraw();
+    },
+    minWidth: sync_url.vals.minWidth,
+    minHeight: sync_url.vals.minHeight
+});
 
 pie = dc
   .pieChart("#pie")
